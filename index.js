@@ -30,6 +30,7 @@ console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin
   Aşağıdaki skor1 ve skor2 kodlarını inceleyiniz ve aşağıdaki soruları altına not alarak cevaplayın
   
   1. skor1 ve skor2 arasındaki fark nedir?
+    skor1 yerel scope olarak kullanilmis. skor2 ise genel scope olarak kullanilmis. 
   
   2. Hangisi bir closure kullanmaktadır? Nasıl tarif edebilirsin? (yarınki derste öğreneceksin :) )
   
@@ -64,9 +65,15 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+//let skor = "";
+
+function takimSkoru(){
+    const skor = Math.ceil(Math.random()* 15 + 10 );
+    return skor;
 }
+
+console.log("Takim skoru :", takimSkoru());
+
 
 
 
@@ -85,13 +92,25 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
   "KonukTakim": 80
 }
 */ 
+takimSkoru();
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
+function macSonucu(takimSkoruFn, ceyrekSayisi) {
+  let evSahibiSkor = 0 ;
+  let konukTakimSkor = 0 ;
+
+  for ( let i=0 ; i < ceyrekSayisi ; i++) {
+    evSahibiSkor = evSahibiSkor + takimSkoruFn()
+    konukTakimSkor = konukTakimSkor + takimSkoruFn()
+  }
+
+  return {
+    "EvSahibi": evSahibiSkor,
+    "KonukTakim": konukTakimSkor
+  }
 }
 
 
-
+console.log("macSonucu", macSonucu(takimSkoru, 4));
 
 
 
@@ -109,11 +128,15 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   */
 
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+function periyotSkoru(sonucUretenFn) {
+  return {
+    "EvSahibi":sonucUretenFn,
+    "KonukTakim":sonucUretenFn,
+  }
 
 }
 
+console.log("periyot skoru: ",periyotSkoru(takimSkoru()));
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
 Aşağıdaki skorTabelasi() fonksiyonunu kullanarak aşağıdakileri yapınız:
@@ -146,11 +169,15 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+function skorTabelasi(periyotSkoruFn, takimSkoruFn, ceyrekSayisi) {
+  let tabela = {} ;
+  for (let i = 0; i < ceyrekSayisi ; i++) {
+    tabela = periyotSkoruFn(takimSkoruFn) ;
+    console.log (`${i + 1}. Periyot: Ev Sahibi ${tabela.EvSahibi} - Konuk Takim ${})
+  }
 }
 
-
+console.log("Skor tabelasi: ", skorTabelasi(periyotSkoru,takimSkoru,4));
 
 
 /* Aşağıdaki satırları lütfen değiştirmeyiniz*/
